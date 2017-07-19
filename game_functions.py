@@ -3,6 +3,7 @@ import sys
 import pygame
 
 from bullet import Bullet
+from alien import Alien
 
 def check_events(ai_settings, screen, ship, bullets):
     # monitor the keyboard and mouse event
@@ -15,7 +16,7 @@ def check_events(ai_settings, screen, ship, bullets):
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
 
-def update_screen(ai_settings, screen, ship, alien, bullets):
+def update_screen(ai_settings, screen, ship, aliens, bullets):
     """update the images on the screen and tab to the new screen"""
     # redraw the screen
     screen.fill(ai_settings.bg_color)
@@ -25,7 +26,7 @@ def update_screen(ai_settings, screen, ship, alien, bullets):
         bullet.draw_bullet()
 
     ship.blitme()
-    alien.blitme()
+    aliens.draw(screen)
 
     # visualize the display
     pygame.display.flip()
@@ -64,3 +65,27 @@ def fire_bullet(ai_settings, screen, ship, bullets):
     if len(bullets) < ai_settings.bullets_allowed:
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
+
+def create_fleet(ai_settings, screen, aliens):
+    """create a fleet of aliens"""
+    alien = Alien(ai_settings, screen)
+    number_alien_x = get_number_aliens_x(ai_settings, alien.rect.width)
+
+    #create the first line of aliens
+    for alien_number in range(number_alien_x):
+        create_alien(ai_settings, screen, aliens, alien_number)
+
+
+def get_number_aliens_x(ai_settings, alien_width):
+    """calculate how many aliens one line could contain"""
+    available_space_x = ai_settings.screen_width - 2 * alien_width
+    number_alien_x = int(available_space_x / (2 * alien_width))
+    return number_alien_x
+
+def create_alien(ai_settings, screen, aliens, alien_number):
+    """create an alien and place it in the current line"""
+    alien = Alien(ai_settings, screen)
+    alien_width = alien.rect.width
+    alien.x = alien_width + 2 * alien_width * alien_number
+    alien.rect.x = alien.x
+    aliens.add(alien)

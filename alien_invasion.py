@@ -6,7 +6,7 @@ from settings import Settings
 from ship import Ship
 import game_functions as gf
 from pygame.sprite import Group
-from alien import Alien
+# from alien import Alien
 
 def run_game():
     #initialize the game and create a screen object
@@ -19,10 +19,14 @@ def run_game():
     ship = Ship(ai_settings, screen)
 
     #create an alien
-    alien = Alien(ai_settings, screen)
+    # alien = Alien(ai_settings, screen)
 
     #create a group containing all the bullets
     bullets = Group()
+    aliens = Group()
+
+    #create a group of alien
+    gf.create_fleet(ai_settings, screen, aliens)
 
     #set background color
     bg_color = (230,230,230)
@@ -33,8 +37,7 @@ def run_game():
         gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
         gf.update_bullets(bullets)
-        gf.update_screen(ai_settings,screen,ship, alien, bullets)
-
+        gf.update_screen(ai_settings,screen,ship, aliens, bullets)
 
 run_game()
 
