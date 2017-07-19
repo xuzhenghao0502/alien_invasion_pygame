@@ -5,6 +5,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 import game_functions as gf
+from pygame.sprite import Group
 
 def run_game():
     #initialize the game and create a screen object
@@ -16,15 +17,19 @@ def run_game():
     #create a ship
     ship = Ship(ai_settings, screen)
 
+    #create a group containing all the bullets
+    bullets = Group()
+
     #set background color
     bg_color = (230,230,230)
 
     #the main loop of the game
     while True:
         #monitor the keyboard and mouse event
-        gf.check_events(ship)
+        gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
-        gf.update_screen(ai_settings,screen,ship)
+        gf.update_bullets(bullets)
+        gf.update_screen(ai_settings,screen,ship, bullets)
 
 run_game()
 
